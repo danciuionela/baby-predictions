@@ -3,39 +3,210 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Baby Card</title>
-
-<link rel="stylesheet" href="style.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
-
+<title>Baby Predictions - Adam Ștefan</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+body {
+    margin: 0;
+    font-family: "Georgia", serif;
+    background: #f5fbff;
+    color: #333;
+}
+.container {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+}
+.card, .certificate {
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+h1 {
+    text-align:center;
+    color:#5b9bd5;
+}
+.subtitle {
+    text-align:center;
+    font-size:20px;
+}
+label {
+    display:block;
+    margin-top:15px;
+}
+input, select, textarea {
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    box-sizing:border-box;
+}
+textarea {
+    height:100px;
+}
+button {
+    width:100%;
+    margin-top:25px;
+    padding:15px;
+    border:none;
+    border-radius:20px;
+    background:#5b9bd5;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+.personality {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+}
+.certificate {
+    text-align:center;
+    border:3px solid #b8ddff;
+}
+.line {
+    margin:20px 0;
+    color:#aaa;
+}
+.item {
+    text-align:left;
+    margin:12px 0;
+}
+.downloads button {
+    background:#8bc34a;
+}
+#certificatePage {
+    display:none;
+}
+</style>
 </head>
-
 <body>
-
-<div id="card">
-
-<img src="Baby Predictions Baby Shower Game in Beige Olive Green Light Brown Watercolor Boho Style.png" class="bg">
-
-<input id="nume" class="nume" placeholder="Nume">
-
-<input class="lungime" placeholder="cm">
-
-<input class="greutate" placeholder="g">
-
-<input class="par" placeholder="">
-
-<input class="ochi" placeholder="">
-
-<textarea class="mare"></textarea>
-
-<button onclick="download()">Descarcă PNG</button>
-
+<div class="container">
+<div id="formPage" class="card">
+<h1>🤍 Baby Predictions</h1>
+<div class="subtitle">
+Pentru Adam Ștefan 💙
 </div>
-
-<script src="script.js"></script>
-
+<p style="text-align:center">
+Completează predicțiile tale înainte de venirea pe lume a lui Adam.
+</p>
+<label>Numele tău *</label>
+<input id="name">
+<label>Relația cu Adam</label>
+<select id="relation">
+<option>Prieten</option>
+<option>Familie</option>
+<option>Colegu</option>
+<option>Altă relație</option>
+</select>
+<label>📅 Când crezi că se va naște?</label>
+<input id="date" placeholder="Ex: 15 August">
+<label>⚖️ Greutate (g)</label>
+<input id="weight">
+<label>📏 Lungime (cm)</label>
+<input id="height">
+<label>👶 Păr</label>
+<input id="hair">
+<label>👀 Ochii</label>
+<input id="eyes">
+<label>❤️ Cu cine va semăna?</label>
+<select id="look">
+<option>Mama</option>
+<option>Tata</option>
+<option>Amândoi</option>
+</select>
+<label>😊 Personalitate</label>
+<div class="personality">
+<label><input type="checkbox" value="Calm"> Calm</label>
+<label><input type="checkbox" value="Poznaș"> Poznaș</label>
+<label><input type="checkbox" value="Curajos"> Curajos</label>
+<label><input type="checkbox" value="Somnoros"> Somnoros</label>
+<label><input type="checkbox" value="Vorbăreț"> Vorbăreț</label>
+<label><input type="checkbox" value="Independent"> Independent</label>
+</div>
+<label>🗣 Primul cuvânt</label>
+<input id="word">
+<label>⭐ Ce profesie va avea?</label>
+<input id="job">
+<label>💌 Un mesaj pentru Adam</label>
+<textarea id="message"></textarea>
+<button onclick="generate()">
+✨ Generează certificatul
+</button>
+</div>
+<div id="certificatePage">
+<div id="certificate" class="certificate">
+<h1>🤍 Baby Predictions</h1>
+<h2>Pentru Adam Ștefan 💙</h2>
+<div class="line">
+──────────────────
+</div>
+<h3>Completat de</h3>
+<h2 id="cName"></h2>
+<div class="line">
+──────────────────
+</div>
+<div class="item">📅 Data: <span id="cDate"></span></div>
+<div class="item">⚖️ Greutate: <span id="cWeight"></span> g</div>
+<div class="item">📏 Lungime: <span id="cHeight"></span> cm</div>
+<div class="item">👶 Păr: <span id="cHair"></span></div>
+<div class="item">👀 Ochi: <span id="cEyes"></span></div>
+<div class="item">❤️ Va semăna cu: <span id="cLook"></span></div>
+<div class="item">😊 Personalitate: <span id="cPersonality"></span></div>
+<div class="item">🗣 Primul cuvânt: <span id="cWord"></span></div>
+<div class="item">⭐ Profesie: <span id="cJob"></span></div>
+<br>
+<div class="item">
+💌 <b>Mesaj</b><br>
+<span id="cMessage"></span>
+</div>
+</div>
+<div class="downloads">
+<button onclick="downloadPDF()">📄 PDF</button>
+<button onclick="downloadPNG()">🖼 PNG</button>
+</div>
+</div>
+</div>
+<script>
+function generate(){
+document.getElementById("formPage").style.display="none";
+document.getElementById("certificatePage").style.display="block";
+cName.innerHTML=name.value.toUpperCase();
+cDate.innerHTML=date.value;
+cWeight.innerHTML=weight.value;
+cHeight.innerHTML=height.value;
+cHair.innerHTML=hair.value;
+cEyes.innerHTML=eyes.value;
+cLook.innerHTML=look.value;
+cWord.innerHTML=word.value;
+cJob.innerHTML=job.value;
+cMessage.innerHTML=message.value;
+let selected=[];
+document.querySelectorAll(".personality input:checked")
+.forEach(x=>selected.push(x.value));
+cPersonality.innerHTML=selected.join(", ");
+}
+function downloadPNG(){
+html2canvas(document.querySelector("#certificate"))
+.then(canvas=>{
+let link=document.createElement("a");
+link.download="Baby-Predictions-Adam-Stefan.png";
+link.href=canvas.toDataURL();
+link.click();
+});
+}
+function downloadPDF(){
+html2canvas(document.querySelector("#certificate"))
+.then(canvas=>{
+let img=canvas.toDataURL("image/png");
+const {jsPDF}=window.jspdf;
+let pdf=new jsPDF();
+pdf.addImage(img,"PNG",10,10,190,0);
+pdf.save("Baby-Predictions-Adam-Stefan.pdf");
+});
+}
+</script>
 </body>
 </html>
