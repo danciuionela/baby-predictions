@@ -6,7 +6,6 @@
 <title>Baby Predictions - Adam Ștefan</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div class="wrapper">
@@ -37,14 +36,9 @@
 <p id="message"></p>
 </div>
 <hr>
-<div class="downloads">
-<button onclick="downloadPDF()">
-📄 PDF
-</button>
 <button onclick="downloadPNG()">
-🖼 PNG
+🖼 Salvează certificatul
 </button>
-</div>
 </div>
 </div>
 <script>
@@ -78,7 +72,10 @@ data.message;
 }
 function downloadPNG(){
 html2canvas(
-document.getElementById("certificate")
+document.getElementById("certificate"),
+{
+    scale:3
+}
 )
 .then(canvas=>{
 const link =
@@ -86,36 +83,8 @@ document.createElement("a");
 link.download =
 "Baby-Predictions-Adam-Stefan.png";
 link.href =
-canvas.toDataURL();
-link.click();
-});
-}
-function downloadPDF(){
-html2canvas(
-document.getElementById("certificate")
-)
-.then(canvas=>{
-const img =
 canvas.toDataURL("image/png");
-const { jsPDF } =
-window.jspdf;
-const pdf =
-new jsPDF(
-"p",
-"mm",
-"a4"
-);
-pdf.addImage(
-img,
-"PNG",
-10,
-10,
-190,
-0
-);
-pdf.save(
-"Baby-Predictions-Adam-Stefan.pdf"
-);
+link.click();
 });
 }
 </script>
