@@ -77,26 +77,52 @@ function downloadPNG(){
 html2canvas(
 document.getElementById("certificate"),
 {
-    scale:3
+    scale:3,
+    backgroundColor:"#ffffff"
 }
 )
-.then(canvas=>{
-const image =
-canvas.toDataURL("image/png");
-const newWindow =
-window.open();
-newWindow.document.write(`
-<html>
-<head>
-<title>Gânduri pentru Adam</title>
-</head>
-<body style="margin:0;text-align:center;background:white;">
-<img 
-src="${image}" 
-style="width:100%;height:auto;">
-</body>
-</html>
-`);
+.then(async canvas => {
+canvas.toBlob(async blob => {
+const file = new File(
+[blob],
+"Ganduri-pentru-Adam-Stefan.png",
+{
+type:"image/png"
+}
+);
+/* Android + iPhone Share */
+if(
+navigator.share &&
+navigator.canShare &&
+navigator.canShare({files:[file]})
+){
+try {
+await navigator.share({
+title:"Gânduri pentru Adam 💙",
+text:"O amintire pentru Adam Ștefan",
+files:[file]
+});
+return;
+}
+catch(error){
+console.log("Partajare anulată");
+}
+}
+/* Varianta descărcare */
+const url =
+URL.createObjectURL(blob);
+const link =
+document.createElement("a");
+link.href=url;
+link.download =
+"Ganduri-pentru-Adam-Stefan.png";
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+setTimeout(()=>{
+URL.revokeObjectURL(url);
+},1000);
+}, "image/png");
 });
 }
 </script>
