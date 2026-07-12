@@ -51,7 +51,7 @@ if(data){
 document.getElementById("name").innerText =
 data.name.toUpperCase();
 document.getElementById("relation").innerText =
-data.relation;
+data.relation || "";
 document.getElementById("date").innerText =
 data.date;
 document.getElementById("weight").innerText =
@@ -77,17 +77,26 @@ function downloadPNG(){
 html2canvas(
 document.getElementById("certificate"),
 {
-scale:3
+    scale:3
 }
 )
 .then(canvas=>{
-const link =
-document.createElement("a");
-link.download =
-"Ganduri-pentru-Adam-Stefan.png";
-link.href =
+const image =
 canvas.toDataURL("image/png");
-link.click();
+const newWindow =
+window.open();
+newWindow.document.write(`
+<html>
+<head>
+<title>Gânduri pentru Adam</title>
+</head>
+<body style="margin:0;text-align:center;background:white;">
+<img 
+src="${image}" 
+style="width:100%;height:auto;">
+</body>
+</html>
+`);
 });
 }
 </script>
