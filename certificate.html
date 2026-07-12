@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baby Predictions - Adam Ștefan</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<div class="wrapper">
+<div id="certificate" class="card certificate">
+<h1>🤍 Baby Predictions</h1>
+<h2>Pentru Adam Ștefan</h2>
+<div class="baby">
+💙
+</div>
+<hr>
+<h3>Completat de</h3>
+<h2 id="name"></h2>
+<hr>
+<div class="details">
+<p>📅 Data: <span id="date"></span></p>
+<p>⚖️ Greutate: <span id="weight"></span></p>
+<p>📏 Lungime: <span id="height"></span></p>
+<p>👶 Păr: <span id="hair"></span></p>
+<p>👀 Ochi: <span id="eyes"></span></p>
+<p>❤️ Va semăna cu: <span id="look"></span></p>
+<p>😊 Personalitate: <span id="personality"></span></p>
+<p>🗣 Primul cuvânt: <span id="word"></span></p>
+<p>⭐ Profesie: <span id="job"></span></p>
+</div>
+<hr>
+<div class="message">
+<h3>💌 Mesaj pentru Adam</h3>
+<p id="message"></p>
+</div>
+<hr>
+<div class="downloads">
+<button onclick="downloadPDF()">
+📄 PDF
+</button>
+<button onclick="downloadPNG()">
+🖼 PNG
+</button>
+</div>
+</div>
+</div>
+<script>
+const data =
+JSON.parse(
+localStorage.getItem("adamPrediction")
+);
+if(data){
+document.getElementById("name").innerText =
+data.name.toUpperCase();
+document.getElementById("date").innerText =
+data.date;
+document.getElementById("weight").innerText =
+data.weight;
+document.getElementById("height").innerText =
+data.height;
+document.getElementById("hair").innerText =
+data.hair;
+document.getElementById("eyes").innerText =
+data.eyes;
+document.getElementById("look").innerText =
+data.look;
+document.getElementById("personality").innerText =
+data.personality;
+document.getElementById("word").innerText =
+data.word;
+document.getElementById("job").innerText =
+data.job;
+document.getElementById("message").innerText =
+data.message;
+}
+function downloadPNG(){
+html2canvas(
+document.getElementById("certificate")
+)
+.then(canvas=>{
+const link =
+document.createElement("a");
+link.download =
+"Baby-Predictions-Adam-Stefan.png";
+link.href =
+canvas.toDataURL();
+link.click();
+});
+}
+function downloadPDF(){
+html2canvas(
+document.getElementById("certificate")
+)
+.then(canvas=>{
+const img =
+canvas.toDataURL("image/png");
+const { jsPDF } =
+window.jspdf;
+const pdf =
+new jsPDF(
+"p",
+"mm",
+"a4"
+);
+pdf.addImage(
+img,
+"PNG",
+10,
+10,
+190,
+0
+);
+pdf.save(
+"Baby-Predictions-Adam-Stefan.pdf"
+);
+});
+}
+</script>
+</body>
+</html>
